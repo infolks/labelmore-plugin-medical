@@ -12,13 +12,13 @@ class JsonEncoder extends Encoder {
     
     finalize(project: Project): FileWriteInfo[] {
         
-        const data = JSON.stringify(this.encodeProject(project))
+        const data = JSON.stringify(this.encodeProject(project), undefined, 4)
 
         return [
             {
                 data: Buffer.from(data),
                 subdirectory: Encoder.SUBFOLDERS.ANNOTATIONS,
-                name: project.title
+                name: project.title + '.json'
             }
         ]
     }

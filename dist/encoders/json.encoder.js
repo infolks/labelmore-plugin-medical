@@ -12,12 +12,12 @@ class JsonEncoder extends labelmore_devkit_1.Encoder {
         return [];
     }
     finalize(project) {
-        const data = JSON.stringify(this.encodeProject(project));
+        const data = JSON.stringify(this.encodeProject(project), undefined, 4);
         return [
             {
                 data: Buffer.from(data),
                 subdirectory: labelmore_devkit_1.Encoder.SUBFOLDERS.ANNOTATIONS,
-                name: project.title
+                name: project.title + '.json'
             }
         ];
     }
