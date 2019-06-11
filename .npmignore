@@ -1,0 +1,6 @@
+# source files
+src/
+
+# test files
+test/
+*.spec.ts
