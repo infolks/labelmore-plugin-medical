@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const labelmore_devkit_1 = require("@infolks/labelmore-devkit");
+const keypoint_label_1 = require("../labels/keypoint.label");
 class JsonEncoder extends labelmore_devkit_1.Encoder {
     constructor() {
         super(...arguments);
@@ -29,9 +30,8 @@ class JsonEncoder extends labelmore_devkit_1.Encoder {
         const attribs = project.frames.map(frame => this.encodeFrame(frame, project));
         const consultants = ['infolks'];
         const description = "";
-        const attrib_filename = "";
         const batch = project.title;
-        return { attribs, consultants, description, attrib_filename, batch };
+        return { attribs, consultants, description, batch };
     }
     /**
      * Encode frame
@@ -47,6 +47,10 @@ class JsonEncoder extends labelmore_devkit_1.Encoder {
             // Contour Label
             else if (label.type === labelmore_devkit_1.DEFAULT_LABEL_TYPES.contour) {
                 return this.contourLabel(label, class_);
+            }
+            // Keypoint Label
+            else if (label.type === keypoint_label_1.TYPE) {
+                return this.KeypointLabel(label, class_);
             }
         });
         const name = frame.name;
@@ -76,6 +80,18 @@ class JsonEncoder extends labelmore_devkit_1.Encoder {
         const ts = new Date().getTime();
         const type = 'poly';
         const points = label.props.points.map(p => [p.x, p.y]);
+        return { text, points, type, ts };
+    }
+    /**
+     * Encode keypoint label
+     * @param label label to encode
+     * @param class_ class of the label
+     */
+    KeypointLabel(label, class_) {
+        const text = class_.name;
+        const ts = new Date().getTime();
+        const type = 'point';
+        const points = [label.props.x, label.props.y];
         return { text, points, type, ts };
     }
 }

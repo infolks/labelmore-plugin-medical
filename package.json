@@ -4,7 +4,8 @@
   "description": "LabelMore plugin for handling medical annotations",
   "main": "dist/index.js",
   "dependencies": {
-    "@infolks/labelmore-devkit": "^1.1.17"
+    "@infolks/labelmore-devkit": "^1.1.17",
+    "@types/paper": "^0.11.14"
   },
   "devDependencies": {
     "@types/node": "^12.0.7",

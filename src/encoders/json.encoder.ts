@@ -1,5 +1,6 @@
 import {Encoder, Project, Frame, FileWriteInfo, Label, ProjectManager, LabelClass, ContourLabel, BoundboxLabel, DEFAULT_LABEL_TYPES} from "@infolks/labelmore-devkit"
 
+import {TYPE as KEYPOINT_TYPE } from '../labels/keypoint.label'
 class JsonEncoder extends Encoder {
 
     public readonly title = "Medical JSON"
@@ -28,18 +29,15 @@ class JsonEncoder extends Encoder {
      * @param project project to encode
      */
     private encodeProject(project: Project) {
-
         const attribs = project.frames.map(frame => this.encodeFrame(frame, project))
 
         const consultants = ['infolks']
 
         const description = ""
 
-        const attrib_filename = ""
-
         const batch = project.title
 
-        return { attribs, consultants, description, attrib_filename, batch }
+        return { attribs, consultants, description, batch }
     }
 
     /**
@@ -65,6 +63,13 @@ class JsonEncoder extends Encoder {
 
                     return this.contourLabel(label, class_)
 
+                }
+
+                // Keypoint Label
+
+                else if (label.type === KEYPOINT_TYPE) {
+
+                    return this.KeypointLabel(label, class_)
                 }
             }
         )
@@ -110,6 +115,25 @@ class JsonEncoder extends Encoder {
         const type = 'poly'
 
         const points = label.props.points.map( p => [p.x, p.y])
+
+        return {text, points, type, ts}
+
+    }
+
+    /**
+     * Encode keypoint label
+     * @param label label to encode
+     * @param class_ class of the label
+     */
+    private KeypointLabel(label: Label, class_: LabelClass) {
+
+        const text = class_.name
+
+        const ts = new Date().getTime()
+
+        const type = 'point'
+
+        const points = [label.props.x, label.props.y]
 
         return {text, points, type, ts}
 
